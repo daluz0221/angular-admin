@@ -1,0 +1,16 @@
+<div class="min-h-screen flex flex-col md:flex-row bg-slate-100 text-slate-900 relative">
+  <!-- Backdrop móvil -->
+  <div
+    [ngClass]="{ 'hidden': !sidebarOpen() }"
+    class="fixed inset-0 z-30 bg-slate-900/40 backdrop-blur-sm md:hidden"
+    (click)="toggleSidebar()"
+  ></div>
+
+  <!-- Sidebar -->
+  <app-sidebar [sidebarOpen]="sidebarOpen()" (toggleSidebar)="toggleSidebar()"></app-sidebar>
+
+  <!-- Main content -->
+  <main class="flex-1 overflow-y-auto p-6">
+    <router-outlet></router-outlet>
+  </main>
+</div>

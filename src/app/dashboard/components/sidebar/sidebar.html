@@ -1,0 +1,223 @@
+<aside
+class="bg-slate-900 text-slate-100 flex flex-col transform transition-[width,transform] duration-300 ease-in-out fixed inset-y-0 left-0 z-40 w-64 md:static md:min-h-screen"
+[ngClass]="{
+  'translate-x-0 md:w-72': sidebarOpen(),
+  '-translate-x-full md:translate-x-0 md:w-16': !sidebarOpen()
+}"
+>
+<!-- Brand -->
+<div
+  class="h-16 flex items-center border-b border-slate-800 transition-[padding] duration-300"
+  [ngClass]="sidebarOpen() ? 'px-4 md:px-6' : 'px-2 md:px-2'"
+>
+  <div
+    class="flex items-center gap-2 w-full transition-all duration-300"
+    [ngClass]="sidebarOpen() ? 'justify-start' : 'justify-center md:justify-center'"
+  >
+    <button
+      type="button"
+      class="h-9 w-9 rounded-xl flex items-center justify-center text-sm font-semibold shrink-0 transition-colors duration-200"
+      [ngClass]="sidebarOpen() ? 'bg-indigo-500' : 'bg-slate-800'"
+      (click)="toggleSidebar.emit()"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+      </svg>
+      
+    </button>
+    <div
+      class="overflow-hidden transition-all duration-300 ease-in-out"
+      [ngClass]="{
+        'w-0 opacity-0 md:w-0 md:opacity-0': !sidebarOpen(),
+        'w-32 opacity-100 md:w-auto': sidebarOpen()
+      }"
+    >
+      <div class="text-sm font-semibold tracking-tight whitespace-nowrap">
+        Panel administrativo
+      </div>
+     
+    </div>
+  </div>
+</div>
+
+<!-- User / Environment info -->
+ @if (sidebarOpen()) {
+<div class="px-6 py-4 border-b border-slate-800">
+  <div class="flex items-center gap-3">
+    <div class="h-9 w-9 rounded-full bg-slate-800 flex items-center justify-center text-xs font-semibold">
+      AD
+    </div>
+    <div class="flex-1">
+      
+      <div class="text-[11px] text-white truncate">
+        admin@tu-cms.com
+      </div>
+    </div>
+    <span class="inline-flex items-center rounded-full bg-emerald-500/10 px-2 py-1 text-[10px] font-medium text-emerald-400 border border-emerald-500/30">
+      Online
+    </span>
+  </div>
+</div>
+}
+<!-- Navigation -->
+<nav class="flex-1 overflow-y-auto py-4 text-sm">
+  @if (sidebarOpen()) { 
+  <div
+    class="px-4 mb-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500"
+    >
+    Páginas
+  </div>
+  }
+  <ul class="space-y-1 px-2">
+    @for (page of pages; track page.id) {
+      <li>
+        <button
+          type="button"
+          class="w-full flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-colors"
+          [ngClass]="{
+            'font-medium bg-slate-800 text-slate-50 shadow-sm shadow-slate-900/40': isPageOpen(page.id),
+            'text-slate-200 hover:bg-slate-800/80': !isPageOpen(page.id)
+          }"
+          (click)="togglePage(page.id)"
+        >
+          <span
+            class="h-7 w-7 rounded-md flex items-center justify-center text-[11px] shrink-0"
+            [ngClass]="page.id === 'productos' ? 'bg-indigo-500/20 border border-indigo-500/40 text-indigo-300' : 'bg-slate-800/60 border border-slate-700'"
+          >
+            {{ page.icon }}
+          </span>
+          <span
+            class="flex-1 text-left transition-opacity duration-200"
+            [ngClass]="{
+              'opacity-0 md:opacity-0 hidden md:hidden': !sidebarOpen(),
+              'opacity-100 inline md:inline': sidebarOpen()
+            }"
+          >
+            {{ page.label }}
+          </span>
+          @if (sidebarOpen()) {
+            <span
+              class="shrink-0 text-slate-400 transition-transform duration-300 ease-out"
+              [ngClass]="{ 'rotate-180': isPageOpen(page.id) }"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
+              </svg>
+            </span>
+          }
+        </button>
+        @if (sidebarOpen()) {
+          <div
+            class="overflow-hidden transition-[max-height,opacity] duration-300 ease-out"
+            [style.max-height.rem]="isPageOpen(page.id) ? 20 : 0"
+            [class.opacity-0]="!isPageOpen(page.id)"
+            [class.opacity-100]="isPageOpen(page.id)"
+          >
+            <ul class="mt-1 ml-4 pl-5 border-l border-slate-700 space-y-0.5 pb-0.5">
+              @for (section of page.sections; track section.label) {
+                <li>
+                  <a
+                    [routerLink]="section.route ?? '#'"
+                    routerLinkActive="bg-slate-800/80 text-slate-100"
+                    [routerLinkActiveOptions]="{ exact: false }"
+                    class="block rounded-lg px-3 py-2 text-xs text-slate-300 hover:bg-slate-800/60 hover:text-slate-200 transition-colors"
+                  >
+                    {{ section.label }}
+                  </a>
+                </li>
+              }
+            </ul>
+          </div>
+        }
+      </li>
+    }
+  </ul>
+
+  @if (sidebarOpen()) { 
+  <div
+    class="px-4 mt-6 mb-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-500"
+    >
+    General
+  </div>
+  }
+  <ul class="space-y-1 px-2">
+    <li>
+      <button
+        class="w-full flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-slate-200 hover:bg-slate-800/80 transition-colors"
+      >
+        <span class="h-7 w-7 rounded-md bg-slate-800/60 border border-slate-700 flex items-center justify-center text-[11px]">
+          A
+        </span>
+        <span
+          class="flex-1 text-left transition-opacity duration-200"
+          
+          [ngClass]="{
+            'opacity-0 md:opacity-0 hidden md:hidden': !sidebarOpen(),
+            'opacity-100 inline md:inline': sidebarOpen()
+          }"
+        >
+          Analytics
+        </span>
+      </button>
+    </li>
+    <li>
+      <button
+        class="w-full flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-slate-200 hover:bg-slate-800/80 transition-colors"
+      >
+        <span class="h-7 w-7 rounded-md bg-slate-800/60 border border-slate-700 flex items-center justify-center text-[11px]">
+          W
+        </span>
+        <span
+          class="flex-1 text-left transition-opacity duration-200"
+          [ngClass]="{
+            'opacity-0 md:opacity-0 hidden md:hidden': !sidebarOpen(),
+            'opacity-100 inline md:inline': sidebarOpen()
+          }"
+        >
+          Web SEO
+        </span>
+      </button>
+    </li>
+    <li>
+      <button
+        class="w-full flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-slate-200 hover:bg-slate-800/80 transition-colors"
+      >
+        <span class="h-7 w-7 rounded-md bg-slate-800/60 border border-slate-700 flex items-center justify-center text-[11px]">
+          AJ
+        </span>
+        <span
+          class="flex-1 text-left transition-opacity duration-200"
+                        [ngClass]="{
+            'opacity-0 md:opacity-0 hidden md:hidden': !sidebarOpen(),
+            'opacity-100 inline md:inline': sidebarOpen()
+          }"
+        >
+          Ajustes
+        </span>
+      </button>
+    </li>
+  </ul>
+</nav>
+
+<!-- Environment summary -->
+ @if (sidebarOpen()) {<div
+    class="px-4 py-4 border-t border-slate-800 text-[11px] text-slate-400 space-y-1.5"
+  >
+    <div class="flex items-center justify-between">
+      <span>Entorno:</span>
+      <span class="inline-flex items-center gap-1 rounded-full bg-slate-800 px-2 py-0.5 border border-slate-700">
+        <span class="h-1.5 w-1.5 rounded-full bg-emerald-400"></span>
+        <span>Producción</span>
+      </span>
+    </div>
+    <div class="flex items-center justify-between">
+      <span>Microservicios activos</span>
+      <span class="font-medium text-slate-200">4/5</span>
+    </div>
+    <div class="flex items-center justify-between">
+      <span>Último despliegue</span>
+      <span>hace 2h 14m</span>
+    </div>
+  </div>}
+
+</aside>
