@@ -1,0 +1,20 @@
+<div class="min-h-screen bg-slate-100 flex flex-col md:flex-row">
+  <!-- Panel izquierdo: marca y mensaje (visible en md+) -->
+  <div class="hidden md:flex md:w-1/2 lg:w-[48%] bg-slate-900 text-slate-100 flex-col justify-center px-10 xl:px-16 py-12">
+    <div class="max-w-sm">
+      <div class="inline-flex h-15 w-15 items-center justify-center rounded-xl bg-indigo-500 text-lg font-semibold text-white shadow-lg">
+        Admin
+      </div>
+      <h1 class="mt-8 text-2xl font-semibold tracking-tight text-white sm:text-3xl">
+        Panel administrativo
+      </h1>
+      <p class="mt-3 text-sm text-slate-400">
+        Gestiona el contenido de tu sitio desde un solo lugar. Inicia sesión para continuar.
+      </p>
+    </div>
+  </div>
+  <!-- Contenido: formulario centrado -->
+  <main class="flex-1 flex items-center justify-center p-4 sm:p-6 md:p-8">
+    <router-outlet />
+  </main>
+</div>

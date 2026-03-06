@@ -81,8 +81,11 @@ class="bg-slate-900 text-slate-100 flex flex-col transform transition-[width,tra
           (click)="togglePage(page.id)"
         >
           <span
-            class="h-7 w-7 rounded-md flex items-center justify-center text-[11px] shrink-0"
-            [ngClass]="page.id === 'productos' ? 'bg-indigo-500/20 border border-indigo-500/40 text-indigo-300' : 'bg-slate-800/60 border border-slate-700'"
+          class="h-7 w-7 rounded-md flex items-center justify-center text-[11px] shrink-0"
+          [ngClass]="{
+            'bg-indigo-500/20 border border-indigo-500/40 text-indigo-300': isPageActive(page),
+            'bg-slate-800/60 border border-slate-700': !isPageActive(page)
+          }"
           >
             {{ page.icon }}
           </span>

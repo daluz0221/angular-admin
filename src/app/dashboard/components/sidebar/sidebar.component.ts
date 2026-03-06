@@ -1,6 +1,6 @@
-import { Component, input, output, signal } from '@angular/core';
+import { Component, inject, input, output, signal } from '@angular/core';
 import { NgClass } from '@angular/common';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 
 export interface PageSection {
   label: string;
@@ -26,6 +26,7 @@ export class SidebarComponent {
 
   /** Id de la página cuyo desplegable está abierto (null = ninguno) */
   openPageId = signal<string | null>(null);
+  protected readonly router = inject(Router);
 
   readonly pages: PageItem[] = [
     {
@@ -34,12 +35,12 @@ export class SidebarComponent {
       icon: 'H',
       sections: [
         { label: 'Hero', route: '/home/hero' },
-        { label: 'Beneficios', route: '/home/benefits' },
+        { label: 'Beneficios', route: '/home/beneficios' },
         { label: 'Productos', route: '/home/products' },
-        { label: 'Como funciona', route: '/home/how-it-works' },
-        { label: 'Acerca de', route: '/home/about' },
-        { label: 'Testimonios', route: '/home/testimonials' },
-        { label: 'Contacto', route: '/home/contact' },
+        { label: 'Como funciona', route: '/home/como-funciona' },
+        { label: 'Acerca de', route: '/home/acerca-de' },
+        { label: 'Testimonios', route: '/home/testimonios' },
+        { label: 'Contacto', route: '/home/contacto' },
       ],
     },
     {
@@ -47,8 +48,8 @@ export class SidebarComponent {
       label: 'Productos',
       icon: 'P',
       sections: [
-        { label: 'Listado', route: '/productos/listado' },
-        { label: 'Categorías', route: '/productos/categorias' },
+        { label: 'introducción', route: '/productos/introducción' },
+        { label: 'productos', route: '/productos/productos' },
       ],
     },
     {
@@ -56,8 +57,8 @@ export class SidebarComponent {
       label: 'Contacto',
       icon: 'C',
       sections: [
-        { label: 'Formulario', route: '/contacto/formulario' },
-        { label: 'Mapa', route: '/contacto/mapa' },
+        { label: 'información', route: '/contacto/información' },
+        { label: 'formulario', route: '/contacto/formulario' },
       ],
     },
     {
@@ -65,11 +66,25 @@ export class SidebarComponent {
       label: 'Nosotros',
       icon: 'N',
       sections: [
-        { label: 'Equipo', route: '/nosotros/equipo' },
-        { label: 'Historia', route: '/nosotros/historia' },
+        { label: 'introducción', route: '/nosotros/introducción' },
+        { label: 'historia', route: '/nosotros/historia' },
+        { label: 'visión', route: '/nosotros/visión' },
+        { label: 'diferenciadores', route: '/nosotros/diferenciadores' },
+        { label: 'equipo', route: '/nosotros/equipo' },
       ],
     },
   ];
+
+  isPageActive(page: PageItem): boolean {
+    const basePath = this.getPageBasePath(page);
+    return this.router.url.startsWith(basePath);
+  }
+  private getPageBasePath(page: PageItem): string {
+    const firstRoute = page.sections[0]?.route;
+    if (!firstRoute) return '';
+    const parts = firstRoute.split('/').filter(Boolean);
+    return parts.length >= 1 ? '/' + parts[0] : '';
+  }
 
   togglePage(pageId: string): void {
     this.openPageId.update((current) => (current === pageId ? null : pageId));
