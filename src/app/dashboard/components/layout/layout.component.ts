@@ -11,6 +11,7 @@ import { RouterOutlet } from '@angular/router';
   })
   export class LayoutComponent {
   
+    
     sidebarOpen = signal<boolean>(true);
     toggleSidebar(): void {
       this.sidebarOpen.update((open) => !open);

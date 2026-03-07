@@ -1,6 +1,7 @@
-import { Component, inject, input, output, signal } from '@angular/core';
+import { Component, computed, inject, input, output, signal } from '@angular/core';
 import { NgClass } from '@angular/common';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { AuthService } from '../../../auth/services/auth.service';
 
 export interface PageSection {
   label: string;
@@ -27,6 +28,9 @@ export class SidebarComponent {
   /** Id de la página cuyo desplegable está abierto (null = ninguno) */
   openPageId = signal<string | null>(null);
   protected readonly router = inject(Router);
+  protected readonly authService = inject(AuthService);
+
+  user = computed(() => this.authService.user() ?? null);
 
   readonly pages: PageItem[] = [
     {
@@ -34,13 +38,13 @@ export class SidebarComponent {
       label: 'Home',
       icon: 'H',
       sections: [
-        { label: 'Hero', route: '/home/hero' },
-        { label: 'Beneficios', route: '/home/beneficios' },
-        { label: 'Productos', route: '/home/products' },
-        { label: 'Como funciona', route: '/home/como-funciona' },
-        { label: 'Acerca de', route: '/home/acerca-de' },
-        { label: 'Testimonios', route: '/home/testimonios' },
-        { label: 'Contacto', route: '/home/contacto' },
+        { label: 'Hero', route: '/admin/home/hero' },
+        { label: 'Beneficios', route: '/admin/home/beneficios' },
+        { label: 'Productos', route: '/admin/home/products' },
+        { label: 'Como funciona', route: '/admin/home/como-funciona' },
+        { label: 'Acerca de', route: '/admin/home/acerca-de' },
+        { label: 'Testimonios', route: '/admin/home/testimonios' },
+        { label: 'Contacto', route: '/admin/home/contacto' },
       ],
     },
     {
@@ -48,8 +52,8 @@ export class SidebarComponent {
       label: 'Productos',
       icon: 'P',
       sections: [
-        { label: 'introducción', route: '/productos/introducción' },
-        { label: 'productos', route: '/productos/productos' },
+        { label: 'introducción', route: '/admin/productos/introducción' },
+        { label: 'productos', route: '/admin/productos/productos' },
       ],
     },
     {
@@ -57,8 +61,8 @@ export class SidebarComponent {
       label: 'Contacto',
       icon: 'C',
       sections: [
-        { label: 'información', route: '/contacto/información' },
-        { label: 'formulario', route: '/contacto/formulario' },
+        { label: 'información', route: '/admin/contacto/información' },
+        { label: 'formulario', route: '/admin/contacto/formulario' },
       ],
     },
     {
@@ -66,11 +70,11 @@ export class SidebarComponent {
       label: 'Nosotros',
       icon: 'N',
       sections: [
-        { label: 'introducción', route: '/nosotros/introducción' },
-        { label: 'historia', route: '/nosotros/historia' },
-        { label: 'visión', route: '/nosotros/visión' },
-        { label: 'diferenciadores', route: '/nosotros/diferenciadores' },
-        { label: 'equipo', route: '/nosotros/equipo' },
+        { label: 'introducción', route: '/admin/nosotros/introducción' },
+        { label: 'historia', route: '/admin/nosotros/historia' },
+        { label: 'visión', route: '/admin/nosotros/visión' },
+        { label: 'diferenciadores', route: '/admin/nosotros/diferenciadores' },
+        { label: 'equipo', route: '/admin/nosotros/equipo' },
       ],
     },
   ];

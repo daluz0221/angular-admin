@@ -50,7 +50,7 @@ class="bg-slate-900 text-slate-100 flex flex-col transform transition-[width,tra
     <div class="flex-1">
       
       <div class="text-[11px] text-white truncate">
-        admin@tu-cms.com
+        {{ user()?.email }}
       </div>
     </div>
     <span class="inline-flex items-center rounded-full bg-emerald-500/10 px-2 py-1 text-[10px] font-medium text-emerald-400 border border-emerald-500/30">
