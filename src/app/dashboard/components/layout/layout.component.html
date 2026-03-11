@@ -9,6 +9,19 @@
   <!-- Sidebar -->
   <app-sidebar [sidebarOpen]="sidebarOpen()" (toggleSidebar)="toggleSidebar()"></app-sidebar>
 
+  <!-- Botón hamburguesa en móvil cuando el sidebar está cerrado (para poder abrirlo de nuevo) -->
+  <button
+    type="button"
+    [ngClass]="{ 'hidden': sidebarOpen() }"
+    class="fixed top-4 left-4 z-20 md:hidden h-10 w-10 rounded-xl flex items-center justify-center bg-slate-900 text-slate-100 shadow-lg"
+    (click)="toggleSidebar()"
+    aria-label="Abrir menú"
+  >
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+    </svg>
+  </button>
+
   <!-- Main content -->
   <main class="flex-1 overflow-y-auto p-6">
     <router-outlet></router-outlet>

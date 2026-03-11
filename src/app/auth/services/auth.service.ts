@@ -1,6 +1,6 @@
 import { Injectable, signal, computed } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, tap, catchError, of } from 'rxjs';
+import { Observable, tap, catchError, of, switchMap } from 'rxjs';
 import { Router } from '@angular/router';
 import { environment } from '../../../environments/environment';
 import { User } from '../interfaces/User.interface';
@@ -68,7 +68,10 @@ export class AuthService {
         withCredentials: true,
       })
       .pipe(
-        tap((res) => this._accessToken.set(res.access)),
+        tap((res) => {
+          this._accessToken.set(res.access);
+          this._authStatus.set('authenticated');
+        }),
       );
   }
 
@@ -81,5 +84,28 @@ export class AuthService {
 
   setAccessToken(token: string | null): void {
     this._accessToken.set(token);
+  }
+
+  /**
+   * Inicializa la sesión al arrancar la app intentando refrescar el access token
+   * usando la cookie HttpOnly de refresh. No guarda nada en localStorage.
+   */
+  initAuthOnStartup(): Promise<void> {
+    return new Promise((resolve) => {
+      this.refreshAccessToken()
+        .pipe(
+          switchMap(() => this.loadCurrentUser()),
+          catchError(() => {
+            this._accessToken.set(null);
+            this._user.set(null);
+            this._authStatus.set('not-authenticated');
+            return of(null as unknown as User);
+          }),
+        )
+        .subscribe({
+          next: () => resolve(),
+          error: () => resolve(),
+        });
+    });
   }
 }

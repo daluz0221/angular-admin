@@ -10,10 +10,16 @@ import { RouterOutlet } from '@angular/router';
     templateUrl: './layout.component.html',
   })
   export class LayoutComponent {
-  
-    
-    sidebarOpen = signal<boolean>(true);
-    toggleSidebar(): void {
-      this.sidebarOpen.update((open) => !open);
+  /** En móvil arranca cerrado; en desktop (md+) arranca abierto. */
+  sidebarOpen = signal<boolean>(false);
+
+  constructor() {
+    if (typeof window !== 'undefined') {
+      this.sidebarOpen.set(window.matchMedia('(min-width: 768px)').matches);
     }
+  }
+
+  toggleSidebar(): void {
+    this.sidebarOpen.update((open) => !open);
+  }
 }

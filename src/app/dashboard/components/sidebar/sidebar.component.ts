@@ -85,9 +85,10 @@ export class SidebarComponent {
   }
   private getPageBasePath(page: PageItem): string {
     const firstRoute = page.sections[0]?.route;
+    
     if (!firstRoute) return '';
     const parts = firstRoute.split('/').filter(Boolean);
-    return parts.length >= 1 ? '/' + parts[0] : '';
+    return parts.length >= 1 ? '/' + parts[0] + '/' + parts[1] : '';
   }
 
   togglePage(pageId: string): void {
